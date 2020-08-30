@@ -177,7 +177,7 @@ Resources:
           sed -i "s/CF_DB_PASSWORD/${DBPassword}/g" /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh
           sed -i "s/CF_DB_HOST/${WSO2ISDBInstance.Endpoint.Address}/g" /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh
           sed -i "s/CF_DB_PORT/${WSO2ISDBInstance.Endpoint.Port}/g" /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh
-          sed -i "s/;/DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;/g" /home/wso2user/dbScripts/MySQL/mysql.sql
+          sed -i "s/;/ DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;/g" /home/wso2user/dbScripts/MySQL/mysql.sql
           bash /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh 2>&1 | tee /home/wso2user/db_log.txt
           echo 'export HISTTIMEFORMAT="%F %T "' >> /etc/profile.d/history.sh
           cat /dev/null > ~/.bash_history && history -c
