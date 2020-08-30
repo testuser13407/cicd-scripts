@@ -105,7 +105,7 @@ Resources:
       DisableApiTermination: 'false'
       InstanceInitiatedShutdownBehavior: stop
       ImageId: !Ref AMIid
-      InstanceType: t2.micro
+      InstanceType: t2.large
       KeyName: !Ref KeyPairName
       Monitoring: 'false'
       Tags:
@@ -163,6 +163,8 @@ Resources:
           sed -i "s/CF_DB_HOST/${WSO2ISDBInstance.Endpoint.Address}/g" /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh
           sed -i "s/CF_DB_PORT/${WSO2ISDBInstance.Endpoint.Port}/g" /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh
           sed -i "s/;/ DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;/g" /home/wso2user/dbScripts/MySQL/mysql.sql
+          export LogserverIP=${WSO2ISLoggingInstance.PrivateIp}
+          echo "$LogserverIP logserver" >> /etc/hosts
           bash /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh 2>&1 | tee /home/wso2user/db_log.txt
           /usr/local/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource WSO2ISBastionInstance --region ${AWS::Region}
           echo 'export HISTTIMEFORMAT="%F %T "' >> /etc/profile.d/history.sh
@@ -174,11 +176,11 @@ Resources:
       ImageId: !Ref AMIid
       InstanceType: !Ref WSO2InstanceType
       IamInstanceProfile: !Ref IAMRole
-      InstanceMonitoring: 'false'
+      InstanceMonitoring: 'true'
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
           Ebs:
-            VolumeSize: '20'
+            VolumeSize: '40'
             VolumeType: gp2
             DeleteOnTermination: 'true'
       KeyName: !Ref KeyPairName
@@ -237,7 +239,7 @@ Resources:
           done
           # send false success
           echo /usr/local/bin/cfn-signal -e 0 --stack ${AWS::StackName} --resource WSO2ISNodeAutoScalingGroup --region ${AWS::Region} >> /var/log/send_success.sh
-          ## /usr/local/bin/cfn-signal -e 0 --stack ${AWS::StackName} --resource WSO2ISNodeAutoScalingGroup --region ${AWS::Region} 
+          /usr/local/bin/cfn-signal -e 0 --stack ${AWS::StackName} --resource WSO2ISNodeAutoScalingGroup --region ${AWS::Region} 
           echo 'export HISTTIMEFORMAT="%F %T "' >> /etc/profile.d/history.sh
           cat /dev/null > ~/.bash_history && history -c
     DependsOn:
@@ -544,7 +546,7 @@ Parameters:
     Type: String
   WSO2InstanceType:
     Type: String
-    Default: t2.medium
+    Default: t2.large
     AllowedValues:
       - t2.medium
       - t2.large
