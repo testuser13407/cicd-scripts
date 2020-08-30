@@ -149,21 +149,6 @@ Resources:
 
           #!/bin/bash
           exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-          echo echo export PATH=~/.local/bin:$PATH >> /var/log/WSO2ISBastionInstance.sh
-          echo apt-get update  >> /var/log/WSO2ISBastionInstance.sh 
-          echo pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz  >> /var/log/WSO2ISBastionInstance.sh
-          echo export DB_HOSTNAME=${WSO2ISDBInstance.Endpoint.Address}  >> /var/log/WSO2ISBastionInstance.sh
-          echo export DB_PORT=${WSO2ISDBInstance.Endpoint.Port}  >> /var/log/WSO2ISBastionInstance.sh
-          echo export DB_USERNAME=${DBUsername}  >> /var/log/WSO2ISBastionInstance.sh
-          echo export DB_PASSWORD=${DBPassword}  >> /var/log/WSO2ISBastionInstance.sh
-          echo rm -rf /home/wso2user/endpointCars  >> /var/log/WSO2ISBastionInstance.sh
-          echo rm -rf /home/wso2user/${Product}-${Version}.zip  >> /var/log/WSO2ISBastionInstance.sh 
-          echo sed -i \"s/CF_DB_USERNAME/${DBUsername}/g\" /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh  >> /var/log/WSO2ISBastionInstance.sh 
-          echo sed -i \"s/CF_DB_PASSWORD/${DBPassword}/g\" /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh  >> /var/log/WSO2ISBastionInstance.sh
-          echo sed -i \"s/CF_DB_HOST/${WSO2ISDBInstance.Endpoint.Address}/g\" /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh  >> /var/log/WSO2ISBastionInstance.sh 
-          sed -i "s/CF_DB_PORT/${WSO2ISDBInstance.Endpoint.Port}/g" /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh  >> /var/log/WSO2ISBastionInstance.sh
-          /usr/local/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource WSO2ISBastionInstance --region ${AWS::Region}  >> /var/log/WSO2ISBastionInstance.sh
-          
           export PATH=~/.local/bin:$PATH
           apt-get update
           pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
@@ -179,9 +164,10 @@ Resources:
           sed -i "s/CF_DB_PORT/${WSO2ISDBInstance.Endpoint.Port}/g" /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh
           sed -i "s/;/ DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;/g" /home/wso2user/dbScripts/MySQL/mysql.sql
           bash /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh 2>&1 | tee /home/wso2user/db_log.txt
+          /usr/local/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource WSO2ISBastionInstance --region ${AWS::Region}
           echo 'export HISTTIMEFORMAT="%F %T "' >> /etc/profile.d/history.sh
           cat /dev/null > ~/.bash_history && history -c
-          /usr/local/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource WSO2ISBastionInstance --region ${AWS::Region}
+          
   WSO2ISNodeLaunchConfiguration:
     Type: 'AWS::AutoScaling::LaunchConfiguration'
     Properties:
