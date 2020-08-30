@@ -237,7 +237,7 @@ Resources:
           done
           # send false success
           echo /usr/local/bin/cfn-signal -e 0 --stack ${AWS::StackName} --resource WSO2ISNodeAutoScalingGroup --region ${AWS::Region} >> /var/log/send_success.sh
-          /usr/local/bin/cfn-signal -e 0 --stack ${AWS::StackName} --resource WSO2ISNodeAutoScalingGroup --region ${AWS::Region} 
+          ## /usr/local/bin/cfn-signal -e 0 --stack ${AWS::StackName} --resource WSO2ISNodeAutoScalingGroup --region ${AWS::Region} 
           echo 'export HISTTIMEFORMAT="%F %T "' >> /etc/profile.d/history.sh
           cat /dev/null > ~/.bash_history && history -c
     DependsOn:
