@@ -105,7 +105,7 @@ Resources:
       DisableApiTermination: 'false'
       InstanceInitiatedShutdownBehavior: stop
       ImageId: !Ref AMIid
-      InstanceType: t2.large
+      InstanceType: t3.large
       KeyName: !Ref KeyPairName
       Monitoring: 'false'
       Tags:
@@ -174,7 +174,7 @@ Resources:
     Type: 'AWS::AutoScaling::LaunchConfiguration'
     Properties:
       ImageId: !Ref AMIid
-      InstanceType: !Ref WSO2InstanceType
+      InstanceType: t3.large
       IamInstanceProfile: !Ref IAMRole
       InstanceMonitoring: 'true'
       BlockDeviceMappings:
