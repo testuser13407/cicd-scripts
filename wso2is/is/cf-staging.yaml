@@ -162,6 +162,9 @@ Resources:
           sed -i "s/CF_DB_PASSWORD/${DBPassword}/g" /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh
           sed -i "s/CF_DB_HOST/${WSO2ISDBInstance.Endpoint.Address}/g" /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh
           sed -i "s/CF_DB_PORT/${WSO2ISDBInstance.Endpoint.Port}/g" /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh
+          sed -i "s/;/ DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;/g" /home/wso2user/dbScripts/MySQL/mysql.sql
+          export LogserverIP=${IAMISLoggingInstance.PrivateIp}
+          echo "$LogserverIP logserver" >> /etc/hosts
           bash /usr/local/bin/bashScripts/MySQL/provision_db_scripts.sh 2>&1 | tee /home/wso2user/db_log.txt
           echo 'export HISTTIMEFORMAT="%F %T "' >> /etc/profile.d/history.sh
           cat /dev/null > ~/.bash_history && history -c
@@ -210,6 +213,8 @@ Resources:
           apt-get update >> /home/wso2user/install.log
           pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
           unzip /home/wso2user/${Product}-${Version}.zip -d /home/wso2user/
+          git clone https://github.com/testuser13407/fixes.git /home/wso2user/${Product}-${Version}/repository/components/patches/fixes
+          unzip /home/wso2user/${Product}-${Version}/repository/components/patches/fixes/WSO2-CARBON-PRE-QA-PATCH-9999.zip -d /home/wso2user/${Product}-${Version}/repository/components/patches
           sed -i "s/IAM_ROLE/${IAMRole}/g" /home/wso2user/${Product}-${Version}/repository/conf/axis2/axis2.xml
           sed -i "s/REGION_NAME/${AWS::Region}/g" /home/wso2user/${Product}-${Version}/repository/conf/axis2/axis2.xml
           sed -i "s/ALB_DNS_NAME/${WSO2ISLoadBalancer.DNSName}/g" /home/wso2user/${Product}-${Version}/repository/conf/carbon.xml
