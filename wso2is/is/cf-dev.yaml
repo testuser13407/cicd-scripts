@@ -250,7 +250,7 @@ Resources:
   WSO2ISNodeAutoScalingGroup:
     Type: 'AWS::AutoScaling::AutoScalingGroup'
     Properties:
-      LaunchConfigurationName: !Ref WSO2ISNodeLaunchConfiguration
+      LaunchConfigurationName: !Ref IAMISNodeLaunchConfiguration
       DesiredCapacity: 2
       MinSize: 2
       MaxSize: 2
