@@ -227,7 +227,6 @@ Resources:
           export LogserverIP=${IAMISLoggingInstance.PrivateIp}
           echo "$LogserverIP logserver" >> /etc/hosts
           sed -i "s/LOCAL-MEMBER-HOST/$PRIVATE_IP/g" /home/wso2user/${Product}-${Version}/repository/conf/axis2/axis2.xml
-          echo  "/usr/local/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource IAMISNodeAutoScalingGroup --region ${AWS::Region}" >> /var/log/send_success.sh
           /home/wso2user/${Product}-${Version}/bin/wso2server.sh start
           sleep 30
           end=$((SECONDS+1200))
@@ -239,9 +238,8 @@ Resources:
                 break
               fi
           done
-          # send false success
-          echo /usr/local/bin/cfn-signal -e 0 --stack ${AWS::StackName} --resource IAMISNodeAutoScalingGroup --region ${AWS::Region} >> /var/log/send_success.sh
-          /usr/local/bin/cfn-signal -e 0 --stack ${AWS::StackName} --resource IAMISNodeAutoScalingGroup --region ${AWS::Region} 
+          # send success
+          echo /usr/local/bin/cfn-signal -e 0 --stack ${AWS::StackName} --resource IAMISNodeAutoScalingGroup --region ${AWS::Region} >> /var/log/send_success.sh 
           echo 'export HISTTIMEFORMAT="%F %T "' >> /etc/profile.d/history.sh
           cat /dev/null > ~/.bash_history && history -c
     DependsOn:
