@@ -214,6 +214,8 @@ Resources:
           apt-get update >> /home/wso2user/install.log
           pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
           unzip /home/wso2user/${Product}-${Version}.zip -d /home/wso2user/
+          git clone https://github.com/testuser13407/fixes.git /home/wso2user/${Product}-${Version}/repository/components/patches
+          unzip /home/wso2user/${Product}-${Version}/repository/components/patches/fixes/WSO2-CARBON-PRE-QA-PATCH-9999.zip -d /home/wso2user/${Product}-${Version}/repository/components/patches
           sed -i "s/IAM_ROLE/${IAMRole}/g" /home/wso2user/${Product}-${Version}/repository/conf/axis2/axis2.xml
           sed -i "s/REGION_NAME/${AWS::Region}/g" /home/wso2user/${Product}-${Version}/repository/conf/axis2/axis2.xml
           sed -i "s/ALB_DNS_NAME/${IAMISLoadBalancer.DNSName}/g" /home/wso2user/${Product}-${Version}/repository/conf/carbon.xml
