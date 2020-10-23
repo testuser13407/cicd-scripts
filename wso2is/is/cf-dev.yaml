@@ -338,7 +338,7 @@ Resources:
       AutoScalingRollingUpdate:
         MaxBatchSize: '2'
         MinInstancesInService: '1'
-        PauseTime: PT50M
+        PauseTime: PT30M
         SuspendProcesses:
           - AlarmNotification
         WaitOnResourceSignals: true
